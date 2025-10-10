@@ -1,0 +1,52 @@
+<div
+  class="navbar-container fixed top-0 left-0 w-full z-50 flex justify-between items-center py-4 px-6 transition-all duration-500 ease-in-out backdrop-blur-sm"
+  [ngClass]="{
+    'bg-[#0f172a]/90 shadow-md': scrolled || !isHomePage,
+    'bg-transparent': isHomePage && !scrolled
+  }"
+>
+  <div><h2 class="text-white font-bold text-3xl">Skyline</h2></div>
+
+  <nav class="navbar">
+    <a
+      routerLink="/"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Home</a
+    >
+    <a
+      routerLink="/booking"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Bookings</a
+    >
+    <a
+      routerLink="/airports"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Airports</a
+    >
+    <a
+      routerLink="/flights"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Flights</a
+    >
+    <a
+      routerLink="/vendors"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Vendors</a
+    >
+    <a
+      routerLink="/customers"
+      class="p-4 inline-block font-semibold text-white hover:text-[#fbbf24] hover:underline hover:underline-offset-10 hover:decoration-2 transition-all duration-300"
+      >Customers</a
+    >
+  </nav>
+
+  <div
+    class="login text-[#0f172a] bg-[#fbbf24] hover:bg-[#fbbf249f] p-2 rounded-lg inline-block font-semibold"
+  >
+    @if (!isLoggedIn) {
+    <a (click)="goToAuth()">Login / Register</a>
+    } @else {
+    <button (click)="logout()">Logout</button>
+    }
+  </div>
+</div>
