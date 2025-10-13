@@ -23,19 +23,25 @@ export class AddAirportModel {
 }
 
 export interface AirportList {
-  employeeId: number;
-  employeeName: string;
-  deptId: number;
-  deptName: string;
-  contactNo: string;
-  emailId: string;
-  role: string;
-  password: string;
-  gender: string;
+  airportCode: string;
+  airportId: number;
+  airportName: string;
+  cityId: number;
+  cityName: string;
 }
 
 export interface APIResponseModel {
   message: string;
   result: boolean;
-  data: string;
+  data: any;
 }
+
+// export class AirportModel {
+//   constructor(
+//     public airportCode: string,
+//     public airportId: number,
+//     public airportName: string,
+//     public cityId: number,
+//     public cityName: string
+//   ) {}
+// }
