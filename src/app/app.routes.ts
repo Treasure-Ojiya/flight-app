@@ -13,7 +13,7 @@ export const routes: Routes = [
   { path: 'home', component: Home }, // ← Add guard
   { path: 'authentication', component: Authentication },
   { path: 'flights', component: Flights, canActivate: [AuthGuard] },
-  { path: 'booking', component: Booking, canActivate: [AuthGuard] },
+  { path: 'booking/:flightId', component: Booking, canActivate: [AuthGuard] },
   { path: 'customers', component: Customers, canActivate: [AuthGuard] },
   { path: 'vendor', component: Vendors, canActivate: [AuthGuard] },
   { path: 'airports', component: Airports, canActivate: [AuthGuard] },

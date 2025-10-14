@@ -24,15 +24,15 @@ swiper-slide img {
 }
 
 /* Pagination */
-.swiper-pagination {
-  margin-top: 20px !important; /* ✅ Extra gap between slider and pagination */
+/* .swiper-pagination {
+  margin-top: 20px !important; 
 }
 
 .swiper-pagination-bullet {
-  background-color: #fbbf24 !important; /* ✅ Yellow color */
+  background-color: #fbbf24 !important; 
   opacity: 1;
 }
 
 .swiper-pagination-bullet-active {
-  background-color: #0f172a !important; /* ✅ Dark color for active bullet */
-}
+  background-color: #0f172a !important; 
+} */

@@ -36,6 +36,39 @@ export interface APIResponseModel {
   data: any;
 }
 
+export interface FlightList {
+  flightId: number;
+  flightNumber: string;
+  arrivalTime: string;
+  departureTime: string;
+  price: 44450;
+  totalSeats: 5;
+  arrivalAirportName: string;
+  arrivalAirportCode: string;
+  departureAirportName: string;
+  departureAirportCode: string;
+  vendorName: string;
+  vendorLogoUrl: string;
+  travelDate: string;
+}
+
+export class BookingModel {
+  constructor(
+    public flightId: number,
+    public customerId: number,
+    public bookingDate: '2025-10-13T09:28:06.931Z',
+    public totalAmount: number,
+    public FlightBookingTravelers: [
+      {
+        travelerName: string;
+        contactNo: string;
+        aadharNo: string;
+        seatNo: number;
+      }
+    ]
+  ) {}
+}
+
 // export class AirportModel {
 //   constructor(
 //     public airportCode: string,
