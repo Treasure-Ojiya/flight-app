@@ -13,6 +13,7 @@ import { filter } from 'rxjs/operators';
 export class Navbar implements OnInit {
   scrolled = false;
   isHomePage = false;
+  menuOpen = false;
   isLoggedIn = false;
 
   router = inject(Router);
@@ -52,5 +53,13 @@ export class Navbar implements OnInit {
     this.authService.logout();
     this.isLoggedIn = false;
     this.router.navigate(['/home']);
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
   }
 }
