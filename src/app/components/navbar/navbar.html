@@ -5,12 +5,10 @@
     'bg-transparent': isHomePage && !scrolled
   }"
 >
-  <!-- Logo -->
   <div>
     <h2 class="text-white font-bold text-3xl">Skyline</h2>
   </div>
 
-  <!-- Hamburger (mobile only) -->
   <button
     class="text-white md:hidden text-3xl focus:outline-none"
     (click)="toggleMenu()"
@@ -21,7 +19,6 @@
     ></i>
   </button>
 
-  <!-- Navigation links -->
   <nav
     class="navbar flex-col md:flex-row md:flex md:items-center md:static absolute top-full left-0 w-full md:w-auto bg-[#0f172a]/95 md:bg-transparent transition-all duration-300 ease-in-out overflow-hidden"
     [ngClass]="{
@@ -50,7 +47,6 @@
       >Flights</a
     >
 
-    <!-- ✅ Login / Logout (mobile view only) -->
     <div
       class="login text-[#0f172a] bg-[#fbbf24] hover:bg-[#fbbf249f] p-2 m-3 rounded-lg font-semibold block md:hidden text-center"
     >
@@ -62,7 +58,6 @@
     </div>
   </nav>
 
-  <!-- ✅ Login / Logout (desktop only) -->
   <div
     class="login text-[#0f172a] bg-[#fbbf24] hover:bg-[#fbbf249f] p-2 rounded-lg font-semibold hidden md:block"
   >
