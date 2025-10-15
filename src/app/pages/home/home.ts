@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Slider } from '../../components/slider/slider';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, Slider],
+  imports: [CommonModule, Slider, RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
