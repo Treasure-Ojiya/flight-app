@@ -4,7 +4,6 @@ import {
   Validators,
   FormBuilder,
   FormGroup,
-  FormArray,
 } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -29,75 +28,40 @@ export class Booking implements OnInit {
   userId!: number;
   initialFare = 0;
   bookingSuccess = false;
-  bookingSummary: any = null;
 
   ngOnInit(): void {
-    // --- Get flightId from route params
+    // Get flightId from route
     this.flightId = Number(this.route.snapshot.paramMap.get('flightId'));
 
-    // --- Get userId from localStorage
+    // Get userId from localStorage
     const user = localStorage.getItem('user');
     if (user) {
       this.userId = JSON.parse(user).userId;
     }
 
-    // --- Build booking form
+    // Initialize booking form (single traveler)
     this.bookingForm = this.formBuilder.group({
       flightId: [this.flightId],
       customerId: [this.userId],
       bookingDate: [new Date().toISOString()],
       totalAmount: [0],
-      FlightBookingTravelers: this.formBuilder.array([]),
-    });
-
-    // --- Get flight details (price)
-    this.flightService.getAllFlights().subscribe((res: any) => {
-      const flight = res.data.find((f: any) => f.flightId === this.flightId);
-      if (flight) {
-        this.initialFare = flight.price;
-        this.updateTotalAmount();
-      }
-    });
-
-    // --- Add first traveler form
-    this.addTraveler();
-  }
-
-  get travelers(): FormArray {
-    return this.bookingForm.get('FlightBookingTravelers') as FormArray;
-  }
-
-  private createTraveler(): FormGroup {
-    return this.formBuilder.group({
       travelerName: ['', Validators.required],
       contactNo: ['', Validators.required],
       aadharNo: ['', Validators.required],
       seatNo: [0, Validators.required],
     });
+
+    // Get flight fare
+    this.flightService.getAllFlights().subscribe((res: any) => {
+      const flight = res.data.find((f: any) => f.flightId === this.flightId);
+      if (flight) {
+        this.initialFare = flight.price;
+        this.bookingForm.patchValue({ totalAmount: flight.price });
+      }
+    });
   }
 
-  addTraveler(): void {
-    const currentTraveler = this.travelers.at(this.travelers.length - 1);
-    if (currentTraveler && currentTraveler.valid) {
-      this.travelers.push(this.createTraveler());
-      this.updateTotalAmount();
-      currentTraveler.reset();
-    } else if (!currentTraveler) {
-      this.travelers.push(this.createTraveler());
-    }
-  }
-
-  removeTraveler(index: number): void {
-    this.travelers.removeAt(index);
-    this.updateTotalAmount();
-  }
-
-  updateTotalAmount(): void {
-    const seatCount = this.travelers.length;
-    const total = seatCount * this.initialFare;
-    this.bookingForm.patchValue({ totalAmount: total });
-  }
-
+  // === SUBMIT BOOKING ===
   onSubmit(): void {
     if (!this.bookingForm.valid) {
       alert('Please complete all traveler details.');
@@ -111,14 +75,14 @@ export class Booking implements OnInit {
       customerId: Number(formValue.customerId),
       bookingDate: new Date(formValue.bookingDate).toISOString(),
       totalAmount: Number(formValue.totalAmount),
-      FlightBookingTravelers: formValue.FlightBookingTravelers.filter(
-        (t: any) => t.travelerName && t.contactNo && t.aadharNo
-      ).map((t: any) => ({
-        travelerName: t.travelerName.trim(),
-        contactNo: t.contactNo.trim(),
-        aadharNo: t.aadharNo.trim(),
-        seatNo: Number(t.seatNo),
-      })),
+      FlightBookingTravelers: [
+        {
+          travelerName: formValue.travelerName.trim(),
+          contactNo: formValue.contactNo.trim(),
+          aadharNo: formValue.aadharNo.trim(),
+          seatNo: Number(formValue.seatNo),
+        },
+      ],
     };
 
     console.log('✅ Final Payload Sent:', payload);
@@ -130,12 +94,15 @@ export class Booking implements OnInit {
         if (res?.result) {
           this.bookingSuccess = true;
           alert(res.message || 'Booking Successful');
-
           this.generateBookingTicket(payload);
 
-          this.travelers.clear();
-          this.addTraveler();
-          this.updateTotalAmount();
+          this.bookingForm.reset({
+            flightId: this.flightId,
+            customerId: this.userId,
+            bookingDate: new Date().toISOString(),
+            totalAmount: this.initialFare,
+            seatNo: 0,
+          });
         } else {
           alert(res.message || 'Booking failed, please try again.');
         }
@@ -159,6 +126,8 @@ export class Booking implements OnInit {
       FlightBookingTravelers,
     } = payload;
 
+    const traveler = FlightBookingTravelers[0];
+
     // HEADER
     doc.setFillColor(0, 102, 204);
     doc.rect(0, 0, 210, 25, 'F');
@@ -166,12 +135,13 @@ export class Booking implements OnInit {
     doc.setFontSize(18);
     doc.text('Skyline E-Ticket Confirmation', 15, 17);
 
-    // FLIGHT DETAILS
+    // FLIGHT SECTION
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('Flight Details', 15, 40);
     doc.setFont('helvetica', 'normal');
+
     doc.setDrawColor(0, 102, 204);
     doc.rect(12, 45, 85, 70);
 
@@ -179,30 +149,24 @@ export class Booking implements OnInit {
     doc.text(`Customer ID: ${customerId}`, 15, 65);
     doc.text(`Booking Date:`, 15, 75);
     doc.text(new Date(bookingDate).toLocaleString(), 20, 82);
-    doc.text(`Total Amount: NGN${totalAmount}`, 15, 95);
+    doc.text(`Total Amount: ₦${totalAmount}`, 15, 95);
 
-    // TRAVELERS SECTION
+    // TRAVELER SECTION
     doc.setFont('helvetica', 'bold');
-    doc.text('Traveler(s)', 110, 40);
+    doc.text('Traveler Details', 110, 40);
     doc.setFont('helvetica', 'normal');
+
     doc.setDrawColor(0, 102, 204);
-    doc.rect(108, 45, 90, 120);
+    doc.rect(108, 45, 90, 90);
 
     let y = 55;
-    (FlightBookingTravelers || []).forEach((t: any, i: number) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(`Traveler ${i + 1}`, 112, y);
-      doc.setFont('helvetica', 'normal');
-      y += 8;
-      doc.text(`Name: ${t.travelerName}`, 115, y);
-      y += 7;
-      doc.text(`Contact: ${t.contactNo}`, 115, y);
-      y += 7;
-      doc.text(`National ID: ${t.aadharNo}`, 115, y);
-      y += 7;
-      doc.text(`Seat No: ${t.seatNo}`, 115, y);
-      y += 10;
-    });
+    doc.text(`Name: ${traveler.travelerName}`, 112, y);
+    y += 8;
+    doc.text(`Contact: ${traveler.contactNo}`, 112, y);
+    y += 8;
+    doc.text(`National ID: ${traveler.aadharNo}`, 112, y);
+    y += 8;
+    doc.text(`Seat No: ${traveler.seatNo}`, 112, y);
 
     // FOOTER
     doc.setFillColor(240, 240, 240);
@@ -220,7 +184,6 @@ export class Booking implements OnInit {
     doc.setDrawColor(0, 102, 204);
     doc.roundedRect(10, 10, 190, 260, 5, 5);
 
-    // SAVE
     doc.save(`Skyline_Eticket_${flightId}.pdf`);
   }
 }
