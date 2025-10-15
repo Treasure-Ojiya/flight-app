@@ -6,10 +6,10 @@
 [build.environment]
   NODE_VERSION = "22.18.0"                 # Match your local Node version
 
-  [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
 
 
 # Disable the Angular plugin

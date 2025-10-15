@@ -10,10 +10,8 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private regUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/Register';
-  private loginUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/Login';
+  private regUrl = '/.netlify/functions/authService?action=register';
+  private loginUrl = '/.netlify/functions/authService?action=login';
 
   isLoggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
 
