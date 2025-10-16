@@ -57,18 +57,29 @@
           {{ item.departureAirportName.toUpperCase() }} &rarr;
           {{ item.arrivalAirportName.toUpperCase() }}
         </h3>
-        <p class="text-sm text-gray-600">Flight ID: {{ item.flightId }}</p>
-        <p class="text-sm text-gray-600">
-          Flight Number: {{ item.flightNumber }}
+        <p class="text-sm font-bold text-gray-600">
+          Flight ID: <span class="font-normal">{{ item.flightId }}</span>
         </p>
-        <p class="text-sm text-gray-600">
-          Date: {{ item.travelDate | date : "dd-MM-yy" }}
+        <p class="text-sm font-bold text-gray-600">
+          Flight Number:
+          <span class="font-normal">{{ item.flightNumber }}</span>
         </p>
-        <p class="text-sm text-gray-600">
-          Depature Time: {{ item.departureTime }}
+        <p class="text-sm font-bold text-gray-600">
+          Number of Seats:
+          <span class="font-normal">{{ item.totalSeats }}</span>
         </p>
-        <p class="text-sm text-gray-600">
-          Arrival Time: {{ item.arrivalTime }}
+        <p class="text-sm font-bold text-gray-600">
+          Date:
+          <span class="font-normal">{{
+            item.travelDate | date : "dd-MM-yy"
+          }}</span>
+        </p>
+        <p class="text-sm font-bold text-gray-600">
+          Depature Time:
+          <span class="font-normal">{{ item.departureTime }}</span>
+        </p>
+        <p class="text-sm font-bold text-gray-600">
+          Arrival Time: <span class="font-normal">{{ item.arrivalTime }}</span>
         </p>
       </div>
 

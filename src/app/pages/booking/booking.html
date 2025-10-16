@@ -72,13 +72,13 @@
         </div>
 
         <!-- Right: Traveler Info -->
-        <div class="flex-1">
+        <div formArrayName="FlightBookingTravelers" class="flex-1">
           <h3 class="font-semibold text-lg mb-3 text-[#0f172a]">
             Traveler Details
           </h3>
 
           <div
-            formGroupName="FlightBookingTraveler"
+            [formGroupName]="0"
             class="border rounded-lg p-4 mb-4 bg-gray-50"
           >
             <input

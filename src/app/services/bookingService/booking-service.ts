@@ -9,10 +9,13 @@ import { APIResponseModel } from '../../model/interface-flight.model';
 export class BookingService {
   constructor(private http: HttpClient) {}
 
-  private bookingUrl = '/.netlify/functions/bookingService';
+  private bookingUrl =
+    'https://freeapi.miniprojectideas.com/api/FlightBooking/BookTicket';
+  private customerUrl =
+    'https://freeapi.miniprojectideas.com/api/FlightBooking/GetAllCustomer';
 
   getAllCustomer() {
-    return this.http.get<APIResponseModel>(this.bookingUrl);
+    return this.http.get<APIResponseModel>(this.customerUrl);
   }
 
   bookticket(data: any) {
