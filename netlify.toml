@@ -26,6 +26,12 @@
   force = true
 
 [[redirects]]
+  from = "/api/BookTicket/*"
+  to = "https://freeapi.miniprojectideas.com/api/Customer/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

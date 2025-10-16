@@ -9,16 +9,17 @@ import { APIResponseModel } from '../../model/interface-flight.model';
 export class BookingService {
   constructor(private http: HttpClient) {}
 
-  private bookingUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/BookTicket';
-  private customerUrl =
-    '/api/Customer';
+  private bookingUrl = '/api/BookTicket';
+
+  private customerUrl = '/api/Customer';
 
   getAllCustomer() {
-    return this.http.get<APIResponseModel>(`${this.customerUrl}/GetAllCustomers`);
+    return this.http.get<APIResponseModel>(
+      `${this.customerUrl}/GetAllCustomers`
+    );
   }
 
   bookticket(data: any) {
-    return this.http.post<any>(this.bookingUrl, data);
+    return this.http.post<any>(`${this.bookingUrl}/BookTicket`, data);
   }
 }
