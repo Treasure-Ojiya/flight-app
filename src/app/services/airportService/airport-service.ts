@@ -9,15 +9,12 @@ import { APIResponseModel } from '../../model/interface-flight.model';
 export class AirportService {
   constructor(private http: HttpClient) {}
 
-  private airportUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/GetAllAirport';
+  private airportUrl = '/api/Airports';
   private addAirportUrl =
     'https://freeapi.miniprojectideas.com/api/FlightBooking/AddUpdateBulkAirports';
 
   getAllAirports(): Observable<APIResponseModel> {
-    return this.http.get<APIResponseModel>(
-      'https://freeapi.miniprojectideas.com/api/FlightBooking/GetAllAirport'
-    );
+    return this.http.get<APIResponseModel>(`${this.airportUrl}/GetAllAirports`);
   }
 
   addAirports(airports: any[]): Observable<any> {

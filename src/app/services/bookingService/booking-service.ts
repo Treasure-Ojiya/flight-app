@@ -12,10 +12,10 @@ export class BookingService {
   private bookingUrl =
     'https://freeapi.miniprojectideas.com/api/FlightBooking/BookTicket';
   private customerUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/GetAllCustomer';
+    '/api/Customer';
 
   getAllCustomer() {
-    return this.http.get<APIResponseModel>(this.customerUrl);
+    return this.http.get<APIResponseModel>(`${this.customerUrl}/GetAllCustomers`);
   }
 
   bookticket(data: any) {

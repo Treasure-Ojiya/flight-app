@@ -9,9 +9,8 @@ import { APIResponseModel } from '../../model/interface-flight.model';
 export class FlightService {
   constructor(private http: HttpClient) {}
 
-  private flightUrl =
-    'https://freeapi.miniprojectideas.com/api/FlightBooking/GetAllFlights';
+  private flightUrl = '/api/FlightBooking';
   getAllFlights(): Observable<APIResponseModel> {
-    return this.http.get<APIResponseModel>(this.flightUrl);
+    return this.http.get<APIResponseModel>(`${this.flightUrl}/GetAllFlights`);
   }
 }
