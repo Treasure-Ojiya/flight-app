@@ -27,7 +27,7 @@
 
 [[redirects]]
   from = "/api/BookTicket/*"
-  to = "https://freeapi.miniprojectideas.com/api/Customer/:splat"
+  to = "https://freeapi.miniprojectideas.com/api/BookTicket/:splat"
   status = 200
   force = true
 
