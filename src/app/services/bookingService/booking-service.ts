@@ -9,7 +9,7 @@ import { APIResponseModel } from '../../model/interface-flight.model';
 export class BookingService {
   constructor(private http: HttpClient) {}
 
-  private bookingUrl = '/api/BookTicket';
+  private bookingUrl = '/api/FlightBooking';
 
   private customerUrl = '/api/Customer';
 
