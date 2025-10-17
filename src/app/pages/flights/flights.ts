@@ -34,8 +34,10 @@ export class Flights implements OnInit {
     });
   }
 
-  bookFlight(flightId: number): void {
-    this.router.navigate(['/booking', flightId]);
+  bookFlight(flight: any): void {
+    this.router.navigate(['/booking', flight.flightId], {
+      queryParams: { price: flight.price }, // both numbers, totally fine
+    });
   }
 
   pageBreak = 5;
