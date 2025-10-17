@@ -62,7 +62,6 @@ export class Booking implements OnInit {
       const flight = res.data.find((f: any) => f.flightId === this.flightId);
       if (flight) {
         this.initialFare = flight.price;
-        this.updateTotalAmount();
       }
     });
 
@@ -87,22 +86,10 @@ export class Booking implements OnInit {
     const currentTraveler = this.travelers.at(this.travelers.length - 1);
     if (currentTraveler && currentTraveler.valid) {
       this.travelers.push(this.createTraveler());
-      this.updateTotalAmount();
       currentTraveler.reset();
     } else if (!currentTraveler) {
       this.travelers.push(this.createTraveler());
     }
-  }
-
-  removeTraveler(index: number): void {
-    this.travelers.removeAt(index);
-    this.updateTotalAmount();
-  }
-
-  updateTotalAmount(): void {
-    const seatCount = this.travelers.length;
-    const total = seatCount * this.initialFare;
-    this.bookingForm.patchValue({ totalAmount: total });
   }
 
   // === SUBMIT BOOKING ===
@@ -146,7 +133,6 @@ export class Booking implements OnInit {
           // Reset form after
           this.travelers.clear();
           this.addTraveler();
-          this.updateTotalAmount();
         } else {
           alert(res.message || 'Booking failed, please try again.');
         }
