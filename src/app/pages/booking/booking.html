@@ -40,7 +40,8 @@
               readonly
             />
           </div>
-          @if(!userId){
+
+          @if (!userId) {
           <div class="mb-4 p-2 bg-yellow-100 rounded">
             <p class="text-sm text-yellow-800">
               ⚠️ No customer ID found. Please ensure you're logged in.
@@ -71,19 +72,7 @@
             </div>
           </div>
 
-          <!-- Total Amount -->
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2">
-              Total Amount
-            </label>
-            <input
-              type="number"
-              formControlName="totalAmount"
-              class="shadow border rounded w-full py-2 px-3 border-[#fbbf24]"
-              readonly
-            />
-          </div>
-
+          <!-- Price Per Traveler -->
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2">
               Price Per Traveler
@@ -97,18 +86,57 @@
               </p>
             </div>
           </div>
+
+          <!-- Total Amount -->
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              Total Amount
+            </label>
+            <input
+              type="number"
+              formControlName="totalAmount"
+              class="shadow border rounded w-full py-2 px-3 border-[#fbbf24] font-bold text-lg"
+              readonly
+            />
+          </div>
         </div>
 
         <!-- Right: Traveler Info -->
         <div formArrayName="FlightBookingTravelers" class="flex-1">
-          <h3 class="font-semibold text-lg mb-3 text-[#0f172a]">
-            Traveler Details
-          </h3>
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-semibold text-lg text-[#0f172a]">
+              Traveler Details
+            </h3>
+            <button
+              type="button"
+              (click)="addTraveler()"
+              class="bg-[#fbb72a] hover:bg-[#fbb72a9a] text-[#0f172a] font-bold py-2 px-4 rounded text-sm"
+            >
+              + Add Traveler
+            </button>
+          </div>
 
+          <!-- Display all travelers -->
+          @for (traveler of travelers.controls; track i; let i = $index) {
           <div
-            [formGroupName]="0"
-            class="border rounded-lg p-4 mb-4 bg-gray-50"
+            [formGroupName]="i"
+            class="border rounded-lg p-4 mb-4 bg-gray-50 relative"
           >
+            <!-- Remove button for additional travelers -->
+            @if (i > 0) {
+            <button
+              type="button"
+              (click)="removeTraveler(i)"
+              class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+            >
+              ×
+            </button>
+            }
+
+            <h4 class="font-semibold mb-3 text-[#0f172a]">
+              Traveler {{ i + 1 }}
+            </h4>
+
             <input
               type="text"
               formControlName="travelerName"
@@ -137,16 +165,18 @@
               class="shadow border rounded w-full py-2 px-3 border-[#fbbf24]"
             />
           </div>
+          }
         </div>
       </div>
 
-      <div class="mt-6 flex justify-center">
+      <!-- Debug section -->
+      <div class="mb-4 p-2 bg-blue-100 rounded">
         <button
-          type="submit"
-          (click)="addTraveler()"
-          class="w-full md:w-1/2 bg-[#fbb72a] hover:bg-[#fbb72a9a] text-[#0f172a] font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline"
+          type="button"
+          (click)="checkFormValues()"
+          class="bg-blue-500 text-white px-3 py-1 rounded text-sm"
         >
-          Add Traveler +
+          Debug Form Values
         </button>
       </div>
 
