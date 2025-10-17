@@ -11,11 +11,11 @@ export class BookingService {
 
   private bookingUrl = '/api/FlightBooking';
 
-  private customerUrl = '/api/Customer';
+  private customerUrl = '/api/FlightBooking';
 
   getAllCustomer() {
     return this.http.get<APIResponseModel>(
-      `${this.customerUrl}/GetAllCustomers`
+      `${this.customerUrl}/GetAllCustomer`
     );
   }
 

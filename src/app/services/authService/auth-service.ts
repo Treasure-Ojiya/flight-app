@@ -10,8 +10,8 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private regUrl = '/.netlify/functions/authService?action=register';
-  private loginUrl = '/.netlify/functions/authService?action=login';
+  private regUrl = '/api/FlightBooking';
+  private loginUrl = '/api/FlightBooking';
 
   isLoggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
 
@@ -19,12 +19,12 @@ export class AuthService {
 
   // --- Register User ---
   registerUser(user: RegistrationModel): Observable<any> {
-    return this.http.post<any>(this.regUrl, user);
+    return this.http.post<any>(`${this.regUrl}/Register`, user);
   }
 
   // --- Login User ---
   loginUser(user: LoginModel): Observable<any> {
-    return this.http.post<any>(this.loginUrl, user);
+    return this.http.post<any>(`${this.loginUrl}/Login`, user);
   }
 
   // --- Save user data (the `data` field) ---
