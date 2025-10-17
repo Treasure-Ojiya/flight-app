@@ -54,7 +54,7 @@ export class Booking implements OnInit {
       flightId: [this.flightId, Validators.required],
       customerId: [this.userId, Validators.required],
       bookingDate: [new Date().toISOString(), Validators.required],
-      totalAmount: [0, [Validators.required, Validators.min(0)]], // Start with 0
+      totalAmount: [0], // Start with 0
       FlightBookingTravelers: this.formBuilder.array([]),
     });
 
@@ -74,7 +74,7 @@ export class Booking implements OnInit {
 
           if (flight) {
             this.flightData = flight;
-            this.initialFare = flight.price || 0;
+            this.initialFare = flight.price;
             console.log('Initial Fare Set To:', this.initialFare); // Debug log
 
             // Update the total amount with the actual price
