@@ -29,22 +29,24 @@ export class Booking implements OnInit {
   bookingForm!: FormGroup;
   flightId!: number;
   userId: number | null = null;
-  initialFare!: number;
+  initialFare: number = 0; // Initialize with 0
   bookingSuccess = false;
   bookingSummary: any = null;
+  flightData: any = null; // Store flight data
 
   ngOnInit(): void {
     // --- Get flightId from route params
     this.flightId = Number(this.route.snapshot.paramMap.get('flightId'));
-    this.initialFare = Number(this.route.snapshot.paramMap.get('price'));
-
-    // --- Get userId from localStorage
     this.userId = this.authService.getUserId();
 
-    console.log('Retrieved User ID:', this.userId); // Debug log
-    console.log('Full User Data:', this.authService.getUser()); // Debug log
+    console.log('Retrieved User ID:', this.userId);
+    console.log('Flight ID:', this.flightId);
 
+    // Initialize form first with default values
     this.initializeForm();
+
+    // Then load flight details to update the price
+    this.loadFlightDetails();
   }
   // --- Build booking form
   //   this.bookingForm = this.formBuilder.group({
@@ -229,28 +231,41 @@ export class Booking implements OnInit {
   private initializeForm(): void {
     this.bookingForm = this.formBuilder.group({
       flightId: [this.flightId, Validators.required],
-      customerId: [this.userId, Validators.required], // This should now auto-fill
+      customerId: [this.userId, Validators.required],
       bookingDate: [new Date().toISOString(), Validators.required],
-      totalAmount: [this.initialFare, [Validators.required, Validators.min(0)]],
+      totalAmount: [0, [Validators.required, Validators.min(0)]], // Start with 0
       FlightBookingTravelers: this.formBuilder.array([]),
     });
 
     // Add first traveler
     this.addTraveler();
-
-    // Get flight details
-    this.loadFlightDetails();
   }
 
   private loadFlightDetails(): void {
-    this.flightService.getAllFlights().subscribe((res: any) => {
-      if (res.isSuccess && res.data) {
-        const flight = res.data.find((f: any) => f.flightId === this.flightId);
-        if (flight) {
-          this.initialFare = flight.price || flight.fare || 0;
-          this.updateTotalAmount();
+    this.flightService.getAllFlights().subscribe({
+      next: (res: any) => {
+        console.log('Flight API Response:', res); // Debug log
+        if (res.isSuccess && res.data) {
+          const flight = res.data.find(
+            (f: any) => f.flightId === this.flightId
+          );
+          console.log('Found Flight:', flight); // Debug log
+
+          if (flight) {
+            this.flightData = flight;
+            this.initialFare = flight.price || 0;
+            console.log('Initial Fare Set To:', this.initialFare); // Debug log
+
+            // Update the total amount with the actual price
+            this.updateTotalAmount();
+          } else {
+            console.error('Flight not found with ID:', this.flightId);
+          }
         }
-      }
+      },
+      error: (err) => {
+        console.error('Error loading flight details:', err);
+      },
     });
   }
 
@@ -285,7 +300,18 @@ export class Booking implements OnInit {
   updateTotalAmount(): void {
     const seatCount = this.travelers.length;
     const total = seatCount * this.initialFare;
-    this.bookingForm.patchValue({ totalAmount: total });
+    console.log('Updating Total Amount:', {
+      seatCount,
+      initialFare: this.initialFare,
+      total,
+    }); // Debug log
+
+    this.bookingForm.patchValue(
+      {
+        totalAmount: total,
+      },
+      { emitEvent: true }
+    );
   }
 
   // Debug method to check form values
@@ -295,11 +321,15 @@ export class Booking implements OnInit {
       'CustomerId Control:',
       this.bookingForm.get('customerId')?.value
     );
+    console.log(
+      'Total Amount Control:',
+      this.bookingForm.get('totalAmount')?.value
+    );
+    console.log('Initial Fare:', this.initialFare);
     console.log('Is Form Valid:', this.bookingForm.valid);
   }
 
   onSubmit(): void {
-    // Debug before submit
     this.checkFormValues();
 
     if (!this.bookingForm.valid) {
@@ -307,7 +337,6 @@ export class Booking implements OnInit {
       return;
     }
 
-    // Ensure customerId is set
     if (!this.bookingForm.get('customerId')?.value) {
       alert('Customer ID is missing. Please log in again.');
       return;
@@ -352,9 +381,14 @@ export class Booking implements OnInit {
     });
   }
 
+  // Display flight price in template (optional)
+  get flightPrice(): number {
+    return this.initialFare;
+  }
+
   // ... rest of your PDF generation code remains the same
-  // // === PDF GENERATION ===
   generateBookingTicket(payload: any): void {
+    // Your existing PDF code
     const doc = new jsPDF('p', 'mm', 'a4');
 
     const {
