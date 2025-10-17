@@ -66,7 +66,7 @@ export class Booking implements OnInit {
     this.flightService.getAllFlights().subscribe({
       next: (res: any) => {
         console.log('Flight API Response:', res); // Debug log
-        if (res.isSuccess && res.data) {
+        if (res.message && res.data && res.result) {
           const flight = res.data.find(
             (f: any) => Number(f.flightId) === Number(this.flightId)
           );
