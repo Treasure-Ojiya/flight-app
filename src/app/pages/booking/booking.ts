@@ -68,8 +68,9 @@ export class Booking implements OnInit {
         console.log('Flight API Response:', res); // Debug log
         if (res.isSuccess && res.data) {
           const flight = res.data.find(
-            (f: any) => f.flightId === this.flightId
+            (f: any) => Number(f.flightId) === Number(this.flightId)
           );
+
           console.log('Found Flight:', flight); // Debug log
 
           if (flight) {
