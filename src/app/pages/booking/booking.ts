@@ -29,13 +29,14 @@ export class Booking implements OnInit {
   bookingForm!: FormGroup;
   flightId!: number;
   userId: number | null = null;
-  initialFare = 0;
+  initialFare!: number;
   bookingSuccess = false;
   bookingSummary: any = null;
 
   ngOnInit(): void {
     // --- Get flightId from route params
     this.flightId = Number(this.route.snapshot.paramMap.get('flightId'));
+    this.initialFare = Number(this.route.snapshot.paramMap.get('price'));
 
     // --- Get userId from localStorage
     this.userId = this.authService.getUserId();
@@ -230,7 +231,7 @@ export class Booking implements OnInit {
       flightId: [this.flightId, Validators.required],
       customerId: [this.userId, Validators.required], // This should now auto-fill
       bookingDate: [new Date().toISOString(), Validators.required],
-      totalAmount: [0, [Validators.required, Validators.min(0)]],
+      totalAmount: [this.initialFare, [Validators.required, Validators.min(0)]],
       FlightBookingTravelers: this.formBuilder.array([]),
     });
 
