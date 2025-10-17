@@ -6,7 +6,7 @@ import {
   FormGroup,
   FormArray,
 } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FlightService } from '../../services/flightService/flight-service';
 import { BookingService } from '../../services/bookingService/booking-service';
@@ -15,7 +15,7 @@ import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-booking',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, DecimalPipe],
   templateUrl: './booking.html',
   styleUrl: './booking.css',
 })
