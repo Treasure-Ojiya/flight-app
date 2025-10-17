@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 import {
   LoginModel,
   RegistrationModel,
@@ -24,7 +24,13 @@ export class AuthService {
 
   // --- Login User ---
   loginUser(user: LoginModel): Observable<any> {
-    return this.http.post<any>(`${this.loginUrl}/Login`, user);
+    return this.http.post<any>(`${this.loginUrl}/Login`, user).pipe(
+      tap((response) => {
+        if (response.message && response.data) {
+          this.saveUser(response.data);
+        }
+      })
+    );
   }
 
   // --- Save user data (the `data` field) ---
@@ -37,6 +43,11 @@ export class AuthService {
   getUser(): any {
     const data = localStorage.getItem('user');
     return data ? JSON.parse(data) : null;
+  }
+
+  getUserId(): number | null {
+    const user = this.getUser();
+    return user?.customerId || user?.userId || null;
   }
 
   // --- Check login status ---

@@ -40,6 +40,20 @@
               readonly
             />
           </div>
+          @if(!userId){
+          <div class="mb-4 p-2 bg-yellow-100 rounded">
+            <p class="text-sm text-yellow-800">
+              ⚠️ No customer ID found. Please ensure you're logged in.
+            </p>
+            <button
+              type="button"
+              (click)="checkFormValues()"
+              class="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm"
+            >
+              Debug Form
+            </button>
+          </div>
+          }
 
           <!-- Booking Date -->
           <div class="mb-4">
