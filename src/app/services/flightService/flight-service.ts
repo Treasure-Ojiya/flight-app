@@ -10,6 +10,7 @@ export class FlightService {
   constructor(private http: HttpClient) {}
 
   private flightUrl = '/api/FlightBooking';
+
   getAllFlights(): Observable<APIResponseModel> {
     return this.http.get<APIResponseModel>(`${this.flightUrl}/GetAllFlights`);
   }
