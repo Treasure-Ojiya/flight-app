@@ -73,27 +73,28 @@ export class Booking implements OnInit {
     this.flightService.getAllFlights().subscribe({
       next: (res: any) => {
         console.log('Flight API Response:', res); // Debug log
-        // if (res.message && res.data && res.result) {
-        //   const flight = res.data.find(
-        //     (f: any) => Number(f.flightId) === Number(this.flightId)
+        if (res.message && res.data && res.result) {
+          const flight = res.data.find(
+            (f: any) => Number(f.flightId) === Number(this.flightId)
+          );
+          const fare = res.data.find(
+            (f: any) => Number(f.price) === Number(this.initialFare)
+          );
 
-        //   );
+          console.log('Found Flight:', flight); // Debug log
+          console.log('Found Flight Price:', fare); // Debug log
 
-        //   const fare =res.data.find((f:any)=>Number(f.initialFare)===Number(this.initialFare))
+          if (flight) {
+            this.flightData = flight;
+            this.initialFare = flight.price;
+            console.log('Initial Fare Set To:', this.initialFare); // Debug log
 
-        //   console.log('Found Flight:', flight); // Debug log
-
-        //   // if (flight) {
-        //   //   this.flightData = flight;
-        //   //   this.initialFare = flight.price;
-        //   //   console.log('Initial Fare Set To:', this.initialFare); // Debug log
-
-        //   //   // Update the total amount with the actual price
-        //   //   this.updateTotalAmount();
-        //   // } else {
-        //   //   console.error('Flight not found with ID:', this.flightId);
-        //   // }
-        // }
+            // Update the total amount with the actual price
+            this.updateTotalAmount();
+          } else {
+            console.error('Flight not found with ID:', this.flightId);
+          }
+        }
       },
       error: (err) => {
         console.error('Error loading flight details:', err);
