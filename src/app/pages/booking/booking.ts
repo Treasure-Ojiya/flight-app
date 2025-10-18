@@ -38,22 +38,15 @@ export class Booking implements OnInit {
     // --- Get flightId from route params
     this.flightId = Number(this.route.snapshot.paramMap.get('flightId'));
     this.userId = this.authService.getUserId();
-    const priceParam = this.route.snapshot.queryParamMap.get('price');
-    this.initialFare = priceParam ? Number(priceParam) : 0;
 
     console.log('Retrieved User ID:', this.userId);
     console.log('Flight ID:', this.flightId);
-    console.log('Price (from route):', this.initialFare);
 
     // Initialize form first with default values
     this.initializeForm();
 
     // Then load flight details to update the price
-    if (!this.initialFare) {
-      this.loadFlightDetails();
-    } else {
-      this.updateTotalAmount();
-    }
+    this.loadFlightDetails();
   }
 
   private initializeForm(): void {
@@ -61,7 +54,7 @@ export class Booking implements OnInit {
       flightId: [this.flightId, Validators.required],
       customerId: [this.userId, Validators.required],
       bookingDate: [new Date().toISOString(), Validators.required],
-      totalAmount: [this.initialFare, Validators.required], // Start with 0
+      totalAmount: [0], // Start with 0
       FlightBookingTravelers: this.formBuilder.array([]),
     });
 
@@ -73,27 +66,24 @@ export class Booking implements OnInit {
     this.flightService.getAllFlights().subscribe({
       next: (res: any) => {
         console.log('Flight API Response:', res); // Debug log
-        if (res.message && res.data && res.result) {
+        if (res?.result && res?.data) {
           const flight = res.data.find(
             (f: any) => Number(f.flightId) === Number(this.flightId)
           );
-          const fare = res.data.find(
-            (f: any) => Number(f.price) === Number(this.initialFare)
-          );
 
-          console.log('Found Flight:', flight); // Debug log
-          console.log('Found Flight Price:', fare); // Debug log
+          console.log('Found Flight:', flight);
 
           if (flight) {
             this.flightData = flight;
-            this.initialFare = flight.price;
-            console.log('Initial Fare Set To:', this.initialFare); // Debug log
+            this.initialFare = Number(flight.price);
+            console.log('Initial Fare Set To:', this.initialFare);
 
-            // Update the total amount with the actual price
             this.updateTotalAmount();
           } else {
             console.error('Flight not found with ID:', this.flightId);
           }
+        } else {
+          console.error('Unexpected API structure:', res);
         }
       },
       error: (err) => {
